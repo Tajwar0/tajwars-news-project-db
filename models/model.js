@@ -5,3 +5,7 @@ exports.fetchTopics = () => {
     return topics.rows;
   });
 };
+
+exports.updateArticle = (article_id, body) => {
+  const voteIncrement = body.inc_votes;
+};

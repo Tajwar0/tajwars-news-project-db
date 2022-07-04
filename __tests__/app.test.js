@@ -22,3 +22,24 @@ describe("3 GET api topics", () => {
       });
   });
 });
+
+describe("5. PATCH /api/articles/:article_id", () => {
+  it("accepts a request body in the form '{ inc_votes: newVote }', the value is then used to increment and update the 'votes' property in the article specified by id ", () => {
+    const updatedVote = { inc_votes: 75 };
+    const updatedArticle = {
+      title: "Moustache",
+      topic: "mitch",
+      author: "butter_bridge",
+      body: "Have you seen the size of that thing?",
+      created_at: 1602419040000,
+      votes: 75,
+    };
+    return request(app)
+      .patch("/api/articles/11")
+      .send(updatedArticle)
+      .expect(201)
+      .then(({ body }) => {
+        expect(body.votes).toEqual(75);
+      });
+  });
+});
