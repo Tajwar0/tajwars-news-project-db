@@ -8,4 +8,5 @@ exports.fetchTopics = () => {
 
 exports.updateArticle = (article_id, body) => {
   const voteIncrement = body.inc_votes;
+  g;
 };
