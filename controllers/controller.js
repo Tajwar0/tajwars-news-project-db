@@ -1,18 +1,24 @@
 const { fetchTopics, updateArticle } = require("../models/model");
 
-exports.getTopics = (req, res) => {
-  fetchTopics().then((topics) => {
-    res.send(topics);
-  });
-};
-
-exports.patchArticle = (req, res) => {
-  const { article_id } = req.params;
-  updateArticle(article_id, req.body)
-    .then((updatedArticle) => {
-      res.status(201).send(updatedArticle);
+exports.getTopics = (req, res, next) => {
+  fetchTopics()
+    .then((topics) => {
+      res.send({ topics });
     })
     .catch((err) => {
-      console.log(err);
+      next(err);
+    });
+};
+
+exports.patchArticle = (req, res, next) => {
+  const { article_id } = req.params;
+  const { inc_votes } = req.body;
+  console.log("<----- 3");
+  updateArticle(article_id, inc_votes)
+    .then((updatedData) => {
+      res.status(201).send(updatedData);
+    })
+    .catch((err) => {
+      next(err);
     });
 };
