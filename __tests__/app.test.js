@@ -23,17 +23,16 @@ describe("topics api", () => {
         });
     });
   });
-});
-
-describe("3 GET api topics", () => {
-  it("respond with an array of topic objects, including properties'slug' and 'description ", () => {
-    return request(app)
-      .get("/api/topics")
-      .expect(200)
-      .then(({ body: { topics } }) => {
-        console.log(topics);
-        expect(topics).toEqual(expectedTopics);
-      });
+  describe("3 GET api topics", () => {
+    it("responds with an array of topic objects, including properties'slug' and 'description ", () => {
+      return request(app)
+        .get("/api/topics")
+        .expect(200)
+        .then(({ body: { topics } }) => {
+          console.log(topics);
+          expect(topics).toEqual(expectedTopics);
+        });
+    });
   });
 });
 
