@@ -27,17 +27,18 @@ describe("Name of the group", () => {
         });
     });
   });
+});
 
-  describe("GET /api/articles/:article_id", () => {
-    it("responds with an article object with the following properties: author, title, article_id, body, topic, created_at, votes", () => {
-      return request(app)
-        .get("/api/articles/1")
-        .expect(200)
-        .then(({ body }) => {
-          expect(neededKeys.every((key) => key in body)).toEqual(true);
-        });
-    });
-
+describe("GET /api/articles/:article_id", () => {
+  it("responds with an article object with the following properties: author, title, article_id, body, topic, created_at, votes", () => {
+    return request(app)
+      .get("/api/articles/1")
+      .expect(200)
+      .then(({ body }) => {
+        expect(neededKeys.every((key) => key in body)).toEqual(true);
+      });
+  });
+});
 const expectedTopics = [
   { description: "The man, the Mitch, the legend", slug: "mitch" },
   { description: "Not dogs", slug: "cats" },
@@ -66,29 +67,5 @@ describe("3 GET api topics", () => {
         console.log(topics);
         expect(topics).toEqual(expectedTopics);
       });
-  });
-});
-
-describe("5. PATCH /api/articles/:article_id", () => {
-  it("accepts a request body in the form '{ inc_votes: newVote }', the value is then used to increment and update the 'votes' property in the article specified by id", () => {
-    const updatedVote = { inc_votes: 75 };
-    return request(app)
-      .patch("/api/articles/11")
-      .send(updatedVote)
-      .expect(201)
-      .then(({ body }) => {
-        expect(body.article).toEqual(
-          expect.objectContaining({
-            title: "Moustache",
-            topic: "mitch",
-            author: "butter_bridge",
-            body: "Have you seen the size of that thing?",
-            created_at: 1602419040000,
-            votes: 75,
-            article_id: 11,
-          })
-        );
-      });
-
   });
 });
