@@ -43,14 +43,14 @@ describe("5. PATCH /api/articles/:article_id", () => {
       .patch("/api/articles/11")
       .send(updatedVote)
       .expect(201)
-      .then(({ body }) => {
-        expect(body.article).toEqual(
+      .then(({ body: { article } }) => {
+        expect(article).toEqual(
           expect.objectContaining({
-            title: "Moustache",
+            title: "Am I a cat?",
             topic: "mitch",
-            author: "butter_bridge",
-            body: "Have you seen the size of that thing?",
-            created_at: 1602419040000,
+            author: "icellusedkars",
+            body: "Having run out of ideas for articles, I am staring at the wall blankly, like a cat. Does this make me a cat?",
+            created_at: "2020-01-15T22:21:00.000Z",
             votes: 75,
             article_id: 11,
           })

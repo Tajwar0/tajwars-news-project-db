@@ -15,10 +15,17 @@ exports.patchArticle = (req, res, next) => {
   const { inc_votes } = req.body;
   console.log("<----- 3");
   updateArticle(article_id, inc_votes)
-    .then((updatedData) => {
-      res.status(201).send(updatedData);
+    .then((article) => {
+      res.status(201).send({ article });
     })
     .catch((err) => {
       next(err);
     });
+};
+
+exports.getArticle = (req, res) => {
+  const { article_id } = req.params;
+  selectArticleById(article_id).then((article) => {
+    res.send(article);
+  });
 };
