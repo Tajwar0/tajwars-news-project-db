@@ -7,9 +7,9 @@ const {
 } = require("./controllers/controller");
 const {
   handleInvalidPaths,
+  handleCustomErrors,
   handlePsqlErrors,
   handleServerErrors,
-  handleCustomeErrors,
 } = require("./controllers/controller.error");
 
 app.use(express.json());
@@ -21,7 +21,8 @@ app.get("/api/articles/:article_id", getArticle);
 app.patch("/api/articles/:article_id", patchArticle);
 
 app.use("*", handleInvalidPaths);
-app.use(handleCustomeErrors);
+
+app.use(handleCustomErrors);
 
 app.use(handlePsqlErrors);
 

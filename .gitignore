@@ -1,8 +1,4 @@
 node_modules
 .env.*
-<<<<<<< HEAD
-.throwaway*
-=======
 .z.js
 
->>>>>>> c9913e07a74aadc7ead91046aaf360238ac64cd6
