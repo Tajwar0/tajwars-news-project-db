@@ -53,17 +53,3 @@ exports.fetchUsers = () => {
     return users.rows;
   });
 };
-
-exports.fetchArticleAndCommentCount = (article_id) => {
-  return db
-    .query("SELECT * FROM articles WHERE article_id = $1;", [article_id])
-    .then((article) => {
-      if (article.rowCount === 0) {
-        return Promise.reject({
-          msg: "article_id is not in database",
-          status: 404,
-        });
-      }
-      return article.rows[0];
-    });
-};

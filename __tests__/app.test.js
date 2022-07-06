@@ -196,20 +196,21 @@ describe("6. GET /api/users", () => {
 
 describe("7. GET /api/articles/:article_id (comment count)", () => {
   describe("/api/articles/:article_id (comment count)", () => {
-    it("should ", () => {
+    it("should respond with an article object including comment_count", () => {
       return request(app)
         .get("/api/articles/5")
         .expect(200)
-        .then(({ body: { users } }) => {
-          expect(users).toEqual(
+        .then(({ body: { article } }) => {
+          expect(article).toEqual(
             expect.objectContaining({
-              title: "Sony Vaio; or, The Laptop",
-              topic: "mitch",
-              author: "icellusedkars",
-              body: "Call me Mitchell. Some years ago—never mind how long precisely—having little or no money in my purse, and nothing particular to interest me on shore, I thought I would buy a laptop about a little and see the codey part of the world. It is a way I have of driving off the spleen and regulating the circulation. Whenever I find myself growing grim about the mouth; whenever it is a damp, drizzly November in my soul; whenever I find myself involuntarily pausing before coffin warehouses, and bringing up the rear of every funeral I meet; and especially whenever my hypos get such an upper hand of me, that it requires a strong moral principle to prevent me from deliberately stepping into the street, and methodically knocking people’s hats off—then, I account it high time to get to coding as soon as I can. This is my substitute for pistol and ball. With a philosophical flourish Cato throws himself upon his sword; I quietly take to the laptop. There is nothing surprising in this. If they but knew it, almost all men in their degree, some time or other, cherish very nearly the same feelings towards the the Vaio with me.",
-              created_at: 1602828180000,
+              article_id: 5,
+              title: "UNCOVERED: catspiracy to bring down democracy",
+              topic: "cats",
+              author: "rogersop",
+              body: "Bastet walks amongst us, and the cats are taking arms!",
+              created_at: "2020-08-03T13:14:00.000Z",
               votes: 0,
-              comment_count: 2,
+              comment_count: 0,
             })
           );
         });

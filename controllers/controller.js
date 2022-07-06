@@ -44,14 +44,3 @@ exports.getUsers = (req, res, next) => {
     res.status(200).send({ users });
   });
 };
-
-exports.getArticleAndCommentCount = (req, res, next) => {
-  const { article_id } = req.params;
-  fetchArticleAndCommentCount(article_id)
-    .then((article) => {
-      res.status(201).send({ article });
-    })
-    .catch((err) => {
-      next(err);
-    });
-};
