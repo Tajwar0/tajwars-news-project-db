@@ -12,7 +12,6 @@ const {
   handleNonExistentIds,
 } = require("./controllers/controller.error");
 app.use(express.json());
-app.get("/api/articles/:article_id", handleNonExistentIds);
 
 app.get("/api/topics", getTopics);
 

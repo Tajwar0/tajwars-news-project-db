@@ -51,8 +51,8 @@ describe("4 Get api", () => {
       return request(app)
         .get("/api/articles/4")
         .expect(200)
-        .then(({ body: { rows } }) => {
-          expect(rows[0]).toEqual(
+        .then(({ body: { article } }) => {
+          expect(article).toEqual(
             expect.objectContaining({
               article_id: 4,
               author: "rogersop",
@@ -81,7 +81,7 @@ describe("4 Get api", () => {
       .get("/api/articles/55500046")
       .expect(404)
       .then(({ body: { msg } }) => {
-        expect(msg).toBe("Invalid input");
+        expect(msg).toBe("article_id is not in database");
       });
   });
 });

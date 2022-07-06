@@ -6,7 +6,7 @@ exports.handleInvalidPaths = (req, res) => {
 
 exports.handleNonExistentIds = (err, req, res, next) => {
   const { article_id } = req.params;
-  if (articles.length < article_id) {
+  if (article_id < articles.length) {
     res
       .status(404)
       .send({ msg: "article_id does not exist in current articles" });
