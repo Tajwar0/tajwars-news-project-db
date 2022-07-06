@@ -6,6 +6,20 @@ exports.fetchTopics = () => {
   });
 };
 
+exports.selectArticleById = (article_id) => {
+  return db
+    .query("SELECT * FROM articles WHERE article_id = $1;", [article_id])
+    .then((article) => {
+      if (article.rowCount === 0) {
+        return Promise.reject({
+          msg: "article_id is not in database",
+          status: 404,
+        });
+      }
+      return article.rows[0];
+    });
+};
+
 exports.updateArticle = (article_id, inc_votes) => {
   if (inc_votes === undefined) {
     return Promise.reject({
@@ -17,7 +31,7 @@ exports.updateArticle = (article_id, inc_votes) => {
     .query(
       `
       UPDATE articles
-      SET votes = votes + $1
+      SET votes = votes+ $1 
       WHERE article_id = $2
       RETURNING*;
     `,
@@ -30,7 +44,6 @@ exports.updateArticle = (article_id, inc_votes) => {
           status: 404,
         });
       }
-
       return updatedArticle.rows[0];
     });
 };

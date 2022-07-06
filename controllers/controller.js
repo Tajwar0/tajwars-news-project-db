@@ -1,9 +1,25 @@
-const { fetchTopics, updateArticle } = require("../models/model");
+const articles = require("../db/data/test-data/articles");
+const {
+  fetchTopics,
+  selectArticleById,
+  updateArticle,
+} = require("../models/model");
 
 exports.getTopics = (req, res, next) => {
   fetchTopics()
     .then((topics) => {
       res.send({ topics });
+    })
+    .catch((err) => {
+      next(err);
+    });
+};
+
+exports.getArticle = (req, res, next) => {
+  const { article_id } = req.params;
+  selectArticleById(article_id)
+    .then((article) => {
+      res.status(200).send({ article });
     })
     .catch((err) => {
       next(err);
@@ -20,11 +36,4 @@ exports.patchArticle = (req, res, next) => {
     .catch((err) => {
       next(err);
     });
-};
-
-exports.getArticle = (req, res) => {
-  const { article_id } = req.params;
-  selectArticleById(article_id).then((article) => {
-    res.send(article);
-  });
 };

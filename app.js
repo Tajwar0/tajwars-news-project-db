@@ -1,15 +1,22 @@
 const express = require("express");
 const app = express();
-const { getTopics, patchArticle } = require("./controllers/controller");
+const {
+  getTopics,
+  patchArticle,
+  getArticle,
+} = require("./controllers/controller");
 const {
   handleInvalidPaths,
   handleCustomErrors,
   handlePsqlErrors,
   handleServerErrors,
 } = require("./controllers/controller.error");
+
 app.use(express.json());
 
 app.get("/api/topics", getTopics);
+
+app.get("/api/articles/:article_id", getArticle);
 
 app.patch("/api/articles/:article_id", patchArticle);
 
