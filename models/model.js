@@ -7,7 +7,12 @@ exports.fetchTopics = () => {
 };
 
 exports.updateArticle = (article_id, inc_votes) => {
-  console.log("<----- 1");
+  if (inc_votes === undefined) {
+    return Promise.reject({
+      msg: "inc_votes is undefined",
+      status: 400,
+    });
+  }
   return db
     .query(
       `
@@ -18,8 +23,14 @@ exports.updateArticle = (article_id, inc_votes) => {
     `,
       [inc_votes, article_id]
     )
-    .then((updatedData) => {
-      console.log("<----- 2");
-      return updatedData.rows[0];
+    .then((updatedArticle) => {
+      if (updatedArticle.rowCount === 0) {
+        return Promise.reject({
+          msg: "article_id is not in database",
+          status: 404,
+        });
+      }
+
+      return updatedArticle.rows[0];
     });
 };

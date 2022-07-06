@@ -3,6 +3,7 @@ const app = express();
 const { getTopics, patchArticle } = require("./controllers/controller");
 const {
   handleInvalidPaths,
+  handleCustomErrors,
   handlePsqlErrors,
   handleServerErrors,
 } = require("./controllers/controller.error");
@@ -13,6 +14,8 @@ app.get("/api/topics", getTopics);
 app.patch("/api/articles/:article_id", patchArticle);
 
 app.use("*", handleInvalidPaths);
+
+app.use(handleCustomErrors);
 
 app.use(handlePsqlErrors);
 
