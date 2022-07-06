@@ -108,53 +108,52 @@ describe("5. PATCH /api/articles/:article_id", () => {
           );
         });
     });
-  });
 
-  describe("Patch errors", () => {
-    it("responds with 400 if passed a non number variable as article_id", () => {
-      const updatedVote = { inc_votes: 75 };
-      return request(app)
-        .patch("/api/articles/four")
-        .send(updatedVote)
-        .expect(400)
-        .then(({ body: { msg } }) => {
-          expect(msg).toBe("Invalid input");
-        });
-    });
-    it("responds with 404 if passed an article_id which does not exist in our database currently", () => {
-      const updatedVote = { inc_votes: 75 };
-      return request(app)
-        .patch("/api/articles/55500046")
-        .send(updatedVote)
-        .expect(404)
-        .then(({ body: { msg } }) => {
-          expect(msg).toBe("article_id is not in database");
-        });
-    });
+    describe("Patch errors", () => {
+      it("responds with 400 if passed a non number variable as article_id", () => {
+        const updatedVote = { inc_votes: 75 };
+        return request(app)
+          .patch("/api/articles/four")
+          .send(updatedVote)
+          .expect(400)
+          .then(({ body: { msg } }) => {
+            expect(msg).toBe("Invalid input");
+          });
+      });
+      it("responds with 404 if passed an article_id which does not exist in our database currently", () => {
+        const updatedVote = { inc_votes: 75 };
+        return request(app)
+          .patch("/api/articles/55500046")
+          .send(updatedVote)
+          .expect(404)
+          .then(({ body: { msg } }) => {
+            expect(msg).toBe("article_id is not in database");
+          });
+      });
 
-    it("responds with 'Iinc_votes is undefined' and a response status of 400 if 'inc_votes' is spelt incorrectly", () => {
-      const updatedVote = { inc_vot: 75 };
-      return request(app)
-        .patch("/api/articles/11")
-        .send(updatedVote)
-        .expect(400)
-        .then(({ body: { msg } }) => {
-          expect(msg).toBe("inc_votes is undefined");
-        });
-    });
-    it("responds with 'Invalid  input' and a response status of 400 if the value of 'inc_votes' not a number", () => {
-      const updatedVote = { inc_votes: "five" };
-      return request(app)
-        .patch("/api/articles/11")
-        .send(updatedVote)
-        .expect(400)
-        .then(({ body: { msg } }) => {
-          expect(msg).toBe("Invalid input");
-        });
+      it("responds with 'inc_votes is undefined' and a response status of 400 if 'inc_votes' is spelt incorrectly", () => {
+        const updatedVote = { inc_vot: 75 };
+        return request(app)
+          .patch("/api/articles/11")
+          .send(updatedVote)
+          .expect(400)
+          .then(({ body: { msg } }) => {
+            expect(msg).toBe("inc_votes is undefined");
+          });
+      });
+      it("responds with 'Invalid  input' and a response status of 400 if the value of 'inc_votes' not a number", () => {
+        const updatedVote = { inc_votes: "five" };
+        return request(app)
+          .patch("/api/articles/11")
+          .send(updatedVote)
+          .expect(400)
+          .then(({ body: { msg } }) => {
+            expect(msg).toBe("Invalid input");
+          });
+      });
     });
   });
 });
-
 describe("6. GET /api/users", () => {
   describe("GET /api/users", () => {
     it("should respon with an array of objects from users data ", () => {
@@ -190,16 +189,6 @@ describe("6. GET /api/users", () => {
               },
             ])
           );
-        });
-    });
-  });
-  describe("error handling", () => {
-    it("responds with 404 and message if get request path does not exist", () => {
-      return request(app)
-        .get("/api/bad_path")
-        .expect(404)
-        .then(({ body: { msg } }) => {
-          expect(msg).toBe("Invalid path");
         });
     });
   });
