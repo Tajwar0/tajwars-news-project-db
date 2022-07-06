@@ -39,7 +39,6 @@ describe("3 topics api", () => {
         .get("/api/topics")
         .expect(200)
         .then(({ body: { topics } }) => {
-          console.log(topics);
           expect(topics).toEqual(expectedTopics);
         });
     });
@@ -151,6 +150,56 @@ describe("5. PATCH /api/articles/:article_id", () => {
         .expect(400)
         .then(({ body: { msg } }) => {
           expect(msg).toBe("Invalid input");
+        });
+    });
+  });
+});
+
+describe("6. GET /api/users", () => {
+  describe("GET /api/users", () => {
+    it("should respon with an array of objects from users data ", () => {
+      return request(app)
+        .get("/api/users")
+        .expect(200)
+        .then(({ body: { users } }) => {
+          expect(users).toEqual(
+            expect.objectContaining([
+              {
+                username: "butter_bridge",
+                name: "jonny",
+                avatar_url:
+                  "https://www.healthytherapies.com/wp-content/uploads/2016/06/Lime3.jpg",
+              },
+              {
+                username: "icellusedkars",
+                name: "sam",
+                avatar_url:
+                  "https://avatars2.githubusercontent.com/u/24604688?s=460&v=4",
+              },
+              {
+                username: "rogersop",
+                name: "paul",
+                avatar_url:
+                  "https://avatars2.githubusercontent.com/u/24394918?s=400&v=4",
+              },
+              {
+                username: "lurker",
+                name: "do_nothing",
+                avatar_url:
+                  "https://www.golenbock.com/wp-content/uploads/2015/01/placeholder-user.png",
+              },
+            ])
+          );
+        });
+    });
+  });
+  describe("error handling", () => {
+    it("responds with 404 and message if get request path does not exist", () => {
+      return request(app)
+        .get("/api/bad_path")
+        .expect(404)
+        .then(({ body: { msg } }) => {
+          expect(msg).toBe("Invalid path");
         });
     });
   });

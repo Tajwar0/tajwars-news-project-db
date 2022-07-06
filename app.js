@@ -4,6 +4,7 @@ const {
   getTopics,
   patchArticle,
   getArticle,
+  getUsers,
 } = require("./controllers/controller");
 const {
   handleInvalidPaths,
@@ -19,6 +20,8 @@ app.get("/api/topics", getTopics);
 app.get("/api/articles/:article_id", getArticle);
 
 app.patch("/api/articles/:article_id", patchArticle);
+
+app.get("/api/users", getUsers);
 
 app.use("*", handleInvalidPaths);
 
