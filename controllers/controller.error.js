@@ -4,12 +4,9 @@ exports.handleInvalidPaths = (req, res) => {
   res.status(404).send({ msg: "Invalid path" });
 };
 
-exports.handleNonExistentIds = (err, req, res, next) => {
-  const { article_id } = req.params;
-  if (article_id < articles.length) {
-    res
-      .status(404)
-      .send({ msg: "article_id does not exist in current articles" });
+exports.handleCustomeErrors = (err, req, res, next) => {
+  if (err.msg && err.status) {
+    res.status(err.status).send({ msg: err.msg });
   } else next(err);
 };
 
