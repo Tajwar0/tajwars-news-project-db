@@ -19,11 +19,7 @@ exports.getArticle = (req, res, next) => {
   const { article_id } = req.params;
   selectArticleById(article_id)
     .then((article) => {
-      if (article_id < articles.length) {
-        res.status(200).send(article);
-      } else if (article_id >= articles.length) {
-        res.status(404).send({ msg: "article_id does not exist in database" });
-      }
+      res.status(200).send({ article });
     })
     .catch((err) => {
       next(err);
