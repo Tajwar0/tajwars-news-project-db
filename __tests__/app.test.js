@@ -254,7 +254,7 @@ describe("9- GET/api/articles/:article_id/comments", () => {
         });
     });
   });
-  describe("handles issues with request", () => {
+  describe.only("handles issues with request", () => {
     it("responds with 400 if passed a non number variable as article_id", () => {
       return request(app)
         .get("/api/articles/four/comments")
@@ -271,13 +271,12 @@ describe("9- GET/api/articles/:article_id/comments", () => {
           expect(msg).toBe("article_id is not in database");
         });
     });
-    it.only("responds with an empty array if passed an article_id which exists but no comments exist in the database with that article_id", () => {
+    it("responds with an empty array if passed an article_id which exists but no comments exist in the database with that article_id", () => {
       return request(app)
         .get("/api/articles/2/comments")
         .expect(200)
-        .then(({ body }) => {
-          expect(body.msg).toBe("not found");
-          expect(body).toBe("hi");
+        .then(({ body: { articleComments } }) => {
+          expect(articleComments).toEqual([]);
         });
     });
   });
