@@ -214,6 +214,9 @@ describe("8- GET/api/articles", () => {
         .get("/api/articles")
         .expect(200)
         .then(({ body: { allArticles } }) => {
+          expect(allArticles).toBeSortedBy(allArticles.created_at, {
+            descending: true,
+          });
           allArticles.forEach((article) => {
             expect(article).toMatchObject({
               article_id: expect.any(Number),
@@ -260,9 +263,9 @@ describe("9- GET/api/articles/:article_id/comments", () => {
           expect(msg).toBe("Invalid input");
         });
     });
-    it("responds with 404 if passed an article_id which does not exist in our database currently", () => {
+    it("responds with 404 if passed an article_id which does not exist in the database currently", () => {
       return request(app)
-        .get("/api/articles/55500046/comments")
+        .get("/api/articles/58643/comments")
         .expect(404)
         .then(({ body: { msg } }) => {
           expect(msg).toBe("article_id is not in database");
