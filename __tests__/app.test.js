@@ -210,7 +210,7 @@ describe("7. GET /api/articles/:article_id (comment count)", () => {
               body: "Bastet walks amongst us, and the cats are taking arms!",
               created_at: "2020-08-03T13:14:00.000Z",
               votes: 0,
-              comment_count: 0,
+              comment_count: 2,
             })
           );
         });
