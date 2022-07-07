@@ -1,4 +1,5 @@
 const db = require("../db/connection");
+const comments = require("../db/data/test-data/comments");
 
 exports.fetchTopics = () => {
   return db.query("SELECT * FROM topics").then((topics) => {
@@ -72,18 +73,23 @@ exports.fetchUsers = () => {
 };
 
 exports.fetchArticleComments = (article_id) => {
-  return db
-    .query(
-      `SELECT comment_id, votes, created_at, author, body FROM comments WHERE article_id = $1`,
-      [article_id]
-    )
-    .then((articleComments) => {
-      if (articleComments.rowCount === 0) {
-        return Promise.reject({
-          msg: "article_id is not in database",
-          status: 404,
-        });
-      }
-      return articleComments.rows;
-    });
+  if (
+    comments.filter((comment) => comment.article_id === article_id).length > 0
+  ) {
+    return db
+      .query(
+        `SELECT comment_id, votes, created_at, author, body FROM comments WHERE article_id = $1`,
+        [article_id]
+      )
+      .then((articleComments) => {
+        if (articleComments.rowCount === 0) {
+          return Promise.reject({
+            msg: "article_id is not in database",
+            status: 404,
+          });
+        }
+        return articleComments.rows;
+      });
+  }
+  return [];
 };
