@@ -193,3 +193,30 @@ describe("6. GET /api/users", () => {
     });
   });
 });
+
+describe("8- GET/api/articles", () => {
+  describe("get/api/articles", () => {
+    it.only("responds with an articles array ", () => {
+      return request(app)
+        .get("/api/articles")
+        .expect(200)
+        .then(({ body: { allArticles } }) => {
+          console.log(allArticles, "bodyyyy");
+          allArticles.forEach((article) => {
+            expect(article).toMatchObject({
+              article_id: expect.any(Number),
+              title: expect.any(String),
+              topic: expect.any(String),
+              author: expect.any(String),
+              body: expect.any(String),
+              created_at: expect.any(String),
+              votes: expect.any(Number),
+              comment_count: expect.any(Number),
+            });
+            expect(allArticles.length).toBe(12);
+            expect(Array.isArray(allArticles)).toBe(true);
+          });
+        });
+    });
+  });
+});
