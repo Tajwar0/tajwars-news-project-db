@@ -6,16 +6,6 @@ const testData = require("../db/data/test-data/index");
 beforeEach(() => seed(testData));
 afterAll(() => connection.end());
 
-const neededKeys = [
-  "author",
-  "title",
-  "article_id",
-  "body",
-  "topic",
-  "created_at",
-  "votes",
-];
-
 const expectedTopics = [
   { description: "The man, the Mitch, the legend", slug: "mitch" },
   { description: "Not dogs", slug: "cats" },
@@ -193,15 +183,37 @@ describe("6. GET /api/users", () => {
     });
   });
 });
+describe("7. GET /api/articles/:article_id (comment count)", () => {
+  describe("/api/articles/:article_id (comment count)", () => {
+    it("should respond with an article object including comment_count", () => {
+      return request(app)
+        .get("/api/articles/5")
+        .expect(200)
+        .then(({ body: { article } }) => {
+          expect(article).toEqual(
+            expect.objectContaining({
+              article_id: 5,
+              title: "UNCOVERED: catspiracy to bring down democracy",
+              topic: "cats",
+              author: "rogersop",
+              body: "Bastet walks amongst us, and the cats are taking arms!",
+              created_at: "2020-08-03T13:14:00.000Z",
+              votes: 0,
+              comment_count: 2,
+            })
+          );
+        });
+    });
+  });
+});
 
 describe("8- GET/api/articles", () => {
   describe("get/api/articles", () => {
-    it.only("responds with an articles array ", () => {
+    it("responds with an articles array ", () => {
       return request(app)
         .get("/api/articles")
         .expect(200)
         .then(({ body: { allArticles } }) => {
-          console.log(allArticles, "bodyyyy");
           allArticles.forEach((article) => {
             expect(article).toMatchObject({
               article_id: expect.any(Number),
