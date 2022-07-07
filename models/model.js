@@ -62,9 +62,6 @@ exports.fetchAllArticles = () => {
     )
     .then((allArticles) => {
       return allArticles.rows;
-    })
-    .catch((err) => {
-      console.log(err);
     });
 };
 
@@ -72,4 +69,21 @@ exports.fetchUsers = () => {
   return db.query("SELECT * FROM users").then((users) => {
     return users.rows;
   });
+};
+
+exports.fetchArticleComments = (article_id) => {
+  return db
+    .query(
+      `SELECT comment_id, votes, created_at, author, body FROM comments WHERE article_id = $1`,
+      [article_id]
+    )
+    .then((articleComments) => {
+      if (articleComments.rowCount === 0) {
+        return Promise.reject({
+          msg: "article_id is not in database",
+          status: 404,
+        });
+      }
+      return articleComments.rows;
+    });
 };
