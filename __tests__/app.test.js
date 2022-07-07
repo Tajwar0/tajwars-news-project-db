@@ -214,6 +214,9 @@ describe("8- GET/api/articles", () => {
         .get("/api/articles")
         .expect(200)
         .then(({ body: { allArticles } }) => {
+          expect(allArticles).toBeSortedBy(allArticles.created_at, {
+            descending: true,
+          });
           allArticles.forEach((article) => {
             expect(article).toMatchObject({
               article_id: expect.any(Number),
@@ -225,7 +228,6 @@ describe("8- GET/api/articles", () => {
               votes: expect.any(Number),
               comment_count: expect.any(Number),
             });
-            expect(allArticles.length).toBe(12);
             expect(Array.isArray(allArticles)).toBe(true);
           });
         });
