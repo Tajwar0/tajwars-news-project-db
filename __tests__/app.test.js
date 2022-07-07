@@ -6,16 +6,6 @@ const testData = require("../db/data/test-data/index");
 beforeEach(() => seed(testData));
 afterAll(() => connection.end());
 
-const neededKeys = [
-  "author",
-  "title",
-  "article_id",
-  "body",
-  "topic",
-  "created_at",
-  "votes",
-];
-
 const expectedTopics = [
   { description: "The man, the Mitch, the legend", slug: "mitch" },
   { description: "Not dogs", slug: "cats" },
@@ -193,7 +183,6 @@ describe("6. GET /api/users", () => {
     });
   });
 });
-
 describe("7. GET /api/articles/:article_id (comment count)", () => {
   describe("/api/articles/:article_id (comment count)", () => {
     it("should respond with an article object including comment_count", () => {
@@ -213,6 +202,34 @@ describe("7. GET /api/articles/:article_id (comment count)", () => {
               comment_count: 2,
             })
           );
+        });
+    });
+  });
+});
+
+describe("8- GET/api/articles", () => {
+  describe("get/api/articles", () => {
+    it("responds with an articles array ", () => {
+      return request(app)
+        .get("/api/articles")
+        .expect(200)
+        .then(({ body: { allArticles } }) => {
+          expect(allArticles).toBeSortedBy(allArticles.created_at, {
+            descending: true,
+          });
+          allArticles.forEach((article) => {
+            expect(article).toMatchObject({
+              article_id: expect.any(Number),
+              title: expect.any(String),
+              topic: expect.any(String),
+              author: expect.any(String),
+              body: expect.any(String),
+              created_at: expect.any(String),
+              votes: expect.any(Number),
+              comment_count: expect.any(Number),
+            });
+            expect(Array.isArray(allArticles)).toBe(true);
+          });
         });
     });
   });

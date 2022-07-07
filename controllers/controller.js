@@ -3,6 +3,7 @@ const {
   fetchTopics,
   selectArticleById,
   updateArticle,
+  fetchAllArticles,
   fetchUsers,
 } = require("../models/model");
 
@@ -39,8 +40,22 @@ exports.patchArticle = (req, res, next) => {
     });
 };
 
+exports.getAllArticles = (req, res, next) => {
+  fetchAllArticles()
+    .then((allArticles) => {
+      res.status(200).send({ allArticles });
+    })
+    .catch((err) => {
+      next(err);
+    });
+};
+
 exports.getUsers = (req, res, next) => {
-  fetchUsers().then((users) => {
-    res.status(200).send({ users });
-  });
+  fetchUsers()
+    .then((users) => {
+      res.status(200).send({ users });
+    })
+    .catch((err) => {
+      next(err);
+    });
 };
