@@ -5,6 +5,7 @@ const {
   updateArticle,
   fetchAllArticles,
   fetchUsers,
+  createComment,
 } = require("../models/model");
 
 exports.getTopics = (req, res, next) => {
@@ -54,6 +55,17 @@ exports.getUsers = (req, res, next) => {
   fetchUsers()
     .then((users) => {
       res.status(200).send({ users });
+    })
+    .catch((err) => {
+      next(err);
+    });
+};
+
+exports.postComment = (req, res, next) => {
+  const { article_id } = req.params;
+  createComment(req.body, article_id)
+    .then((createdComment) => {
+      res.status(201).send({ createdComment });
     })
     .catch((err) => {
       next(err);

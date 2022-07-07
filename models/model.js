@@ -73,3 +73,16 @@ exports.fetchUsers = () => {
     return users.rows;
   });
 };
+
+exports.createComment = (requestBody, article_id) => {
+  const { username, body } = requestBody;
+  console.log(username);
+  return db
+    .query(
+      `INSERT INTO comments (body,  author, article_id) VALUES ($1, $2, $3) RETURNING*`,
+      [body, username, article_id]
+    )
+    .then((createdComment) => {
+      return createdComment.rows[0];
+    });
+};

@@ -234,3 +234,28 @@ describe("8- GET/api/articles", () => {
     });
   });
 });
+
+describe("10- post/api/articles/:article_id/comments", () => {
+  describe("api/articles/:article_id/comments", () => {
+    it.only("request body accepts an object with username and body, responds with posted comment", () => {
+      const newComment = {
+        body: "5 hours of debugging can save you 7 minutes of reading documentation, debugging is cool",
+        username: "butter_bridge",
+      };
+      return request(app)
+        .post("/api/articles/1/comments")
+        .send(newComment)
+        .expect(201)
+        .then(({ body: { createdComment } }) => {
+          expect(createdComment).toEqual({
+            body: "5 hours of debugging can save you 7 minutes of reading documentation, debugging is cool",
+            author: "butter_bridge",
+            votes: 0,
+            article_id: 1,
+            comment_id: expect.any(Number),
+            created_at: expect.any(String),
+          });
+        });
+    });
+  });
+});
