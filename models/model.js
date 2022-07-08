@@ -76,19 +76,20 @@ exports.fetchUsers = () => {
 };
 
 exports.createComment = (requestBody, article_id) => {
+  const { username, body } = requestBody;
   if (article_id < 0 || article_id >= articles.length) {
     return Promise.reject({
       msg: "article_id is not in database",
       status: 404,
     });
   }
-  const { username, body } = requestBody;
-  if (Object.keys(requestBody) !== { username, body }) {
+  if (username === undefined || body === undefined) {
     return Promise.reject({
       msg: "bad user post input",
       status: 400,
     });
   }
+
   return db
     .query(
       `INSERT INTO comments (body,  author, article_id) VALUES ($1, $2, $3) RETURNING*`,

@@ -240,7 +240,7 @@ describe("8- GET/api/articles", () => {
   });
 });
 
-describe("10- post/api/articles/:article_id/comments", () => {
+describe.only("10- post/api/articles/:article_id/comments", () => {
   describe("api/articles/:article_id/comments", () => {
     it("request body accepts an object with username and body, responds with posted comment", () => {
       return request(app)
@@ -278,7 +278,7 @@ describe("10- post/api/articles/:article_id/comments", () => {
           expect(msg).toBe("article_id is not in database");
         });
     });
-    it.only("if username or body is not spelt correctly", () => {
+    it("if username or body is not spelt correctly", () => {
       return request(app)
         .post("/api/articles/1/comments")
         .send({
