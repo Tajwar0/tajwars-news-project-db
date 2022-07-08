@@ -1,4 +1,5 @@
 const db = require("../db/connection");
+const articles = require("../db/data/test-data/articles");
 
 exports.fetchTopics = () => {
   return db.query("SELECT * FROM topics").then((topics) => {
@@ -75,8 +76,19 @@ exports.fetchUsers = () => {
 };
 
 exports.createComment = (requestBody, article_id) => {
+  if (article_id < 0 || article_id >= articles.length) {
+    return Promise.reject({
+      msg: "article_id is not in database",
+      status: 404,
+    });
+  }
   const { username, body } = requestBody;
-  console.log(username);
+  if (Object.keys(requestBody) !== { username, body }) {
+    return Promise.reject({
+      msg: "bad user post input",
+      status: 400,
+    });
+  }
   return db
     .query(
       `INSERT INTO comments (body,  author, article_id) VALUES ($1, $2, $3) RETURNING*`,
