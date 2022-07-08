@@ -254,7 +254,7 @@ describe("9- GET/api/articles/:article_id/comments", () => {
         });
     });
   });
-  describe.only("handles issues with request", () => {
+  describe("handles issues with request", () => {
     it("responds with 400 if passed a non number variable as article_id", () => {
       return request(app)
         .get("/api/articles/four/comments")
