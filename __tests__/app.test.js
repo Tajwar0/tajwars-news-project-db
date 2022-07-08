@@ -234,3 +234,82 @@ describe("8- GET/api/articles", () => {
     });
   });
 });
+
+describe.only("11. GET /api/articles (queries)", () => {
+  describe("tests for 0 queries, sorted by date order descending", () => {
+    it("should return all articles sorted by date in descending order ", () => {
+      return request(app)
+        .get("/api/articles")
+        .expect(200)
+        .then(({ body: { allArticles } }) => {
+          expect(allArticles).toBeSortedBy("created_at", {
+            descending: true,
+          });
+        });
+    });
+  });
+  describe("tests for each query successively", () => {
+    it("/api/articles?sort_by=title , sort by title in descending order", () => {
+      return request(app)
+        .get("/api/articles?sort_by=title")
+        .expect(200)
+        .then(({ body: { allArticles } }) => {
+          expect(allArticles).toBeSortedBy("title", {
+            descending: true,
+          });
+        });
+    });
+    it("?order=ASC , sort articles in ascending order ", () => {
+      return request(app)
+        .get("/api/articles?order=ASC")
+        .expect(200)
+        .then(({ body: { allArticles } }) => {
+          expect(allArticles).toBeSortedBy("created_at", {
+            ascending: true,
+          });
+        });
+    });
+    it("query ?topic=cats ", () => {
+      return request(app)
+        .get("/api/articles?topic=cats")
+        .expect(200)
+        .then(({ body: { allArticles } }) => {
+          allArticles.forEach((article) => {
+            expect(article).toMatchObject({
+              article_id: expect.any(Number),
+              title: expect.any(String),
+              topic: "cats",
+              author: expect.any(String),
+              body: expect.any(String),
+              created_at: expect.any(String),
+              votes: expect.any(Number),
+              comment_count: expect.any(Number),
+            });
+          });
+        });
+    });
+  });
+  it("joint query of 3 parameters, should return a filtered articles list with mitch as the topic, sorted in descending order from column comment_count, a ", () => {
+    return request(app)
+      .get("/api/articles?sort_by=title&order=ASC&topic=comment_count")
+      .expect(200)
+      .then(({ body: { allArticles } }) => {
+        console.log(allArticles);
+        expect(allArticles).toBeSortedBy("comment_count", {
+          ascending: true,
+        });
+        allArticles.forEach((article) => {
+          expect(article).toMatchObject({
+            article_id: expect.any(Number),
+            title: expect.any(String),
+            topic: "mitch",
+            author: expect.any(String),
+            body: expect.any(String),
+            created_at: expect.any(String),
+            votes: expect.any(Number),
+            comment_count: expect.any(Number),
+          });
+        });
+      });
+  });
+});
