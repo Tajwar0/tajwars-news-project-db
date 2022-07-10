@@ -96,6 +96,7 @@ exports.createComment = (requestBody, article_id) => {
       [body, username, article_id]
     )
     .then((createdComment) => {
+      console.log(createdComment.rows[0]);
       return createdComment.rows[0];
     });
 };
