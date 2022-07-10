@@ -393,13 +393,12 @@ describe("11. GET /api/articles (queries)", () => {
           });
         });
     });
-    it.only("joint query of 3 parameters, should return a filtered articles list with mitch as the topic, sorted in descending order from column comment_count, a ", () => {
+    it("joint query of 3 parameters, should return a filtered articles list with mitch as the topic, sorted in descending order from column comment_count, a ", () => {
       return request(app)
-        .get("/api/articles?sort_by=title&order=ASC&topic=comment_count")
+        .get("/api/articles?sort_by=title&order=ASC&topic=mitch")
         .expect(200)
         .then(({ body: { allArticles } }) => {
-          console.log(allArticles);
-          expect(allArticles).toBeSortedBy("comment_count", {
+          expect(allArticles).toBeSortedBy("title", {
             ascending: true,
           });
           allArticles.forEach((article) => {
