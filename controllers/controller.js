@@ -1,10 +1,10 @@
-const articles = require("../db/data/test-data/articles");
 const {
   fetchTopics,
   selectArticleById,
   updateArticle,
   fetchAllArticles,
   fetchUsers,
+  fetchArticleComments,
 } = require("../models/model");
 
 exports.getTopics = (req, res, next) => {
@@ -54,6 +54,17 @@ exports.getUsers = (req, res, next) => {
   fetchUsers()
     .then((users) => {
       res.status(200).send({ users });
+    })
+    .catch((err) => {
+      next(err);
+    });
+};
+
+exports.getArticleComments = (req, res, next) => {
+  const { article_id } = req.params;
+  fetchArticleComments(article_id)
+    .then((articleComments) => {
+      res.status(200).send({ articleComments });
     })
     .catch((err) => {
       next(err);
