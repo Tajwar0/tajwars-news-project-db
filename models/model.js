@@ -1,5 +1,5 @@
 const db = require("../db/connection");
-const comments = require("../db/data/test-data/comments");
+
 const articles = require("../db/data/test-data/articles");
 
 exports.fetchTopics = () => {
@@ -72,6 +72,32 @@ exports.fetchUsers = () => {
     return users.rows;
   });
 };
+
+exports.createComment = (requestBody, article_id) => {
+  const { username, body } = requestBody;
+  if (article_id < 0 || article_id >= articles.length) {
+    return Promise.reject({
+      msg: "article_id is not in database",
+      status: 404,
+    });
+  }
+  if (username === undefined || body === undefined) {
+    return Promise.reject({
+      msg: "bad user post input",
+      status: 400,
+    });
+  }
+
+  return db
+    .query(
+      `INSERT INTO comments (body,  author, article_id) VALUES ($1, $2, $3) RETURNING*`,
+      [body, username, article_id]
+    )
+    .then((createdComment) => {
+      return createdComment.rows[0];
+    });
+};
+
 
 exports.fetchArticleComments = (article_id) => {
   if (article_id < -1 || article_id >= articles.length) {

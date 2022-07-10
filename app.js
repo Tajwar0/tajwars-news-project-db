@@ -7,7 +7,9 @@ const {
   getAllArticles,
   getUsers,
   postComment,
+
   getArticleComments,
+
 } = require("./controllers/controller");
 const {
   handleInvalidPaths,
@@ -29,6 +31,7 @@ app.get("/api/articles", getAllArticles);
 app.get("/api/users", getUsers);
 
 app.post("/api/articles/:article_id/comments", postComment);
+
 
 app.get("/api/articles/:article_id/comments", getArticleComments);
 

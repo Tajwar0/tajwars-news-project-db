@@ -240,6 +240,7 @@ describe("8- GET/api/articles", () => {
   });
 });
 
+
 describe("9- GET/api/articles/:article_id/comments", () => {
   describe("get/api/articles/:article_id/comments", () => {
     it("responds with an array of comments from the given article_id", () => {
@@ -286,6 +287,7 @@ describe("9- GET/api/articles/:article_id/comments", () => {
     });
   });
 });
+
 
 describe.only("10- post/api/articles/:article_id/comments", () => {
   describe("api/articles/:article_id/comments", () => {
