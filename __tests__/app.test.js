@@ -70,14 +70,14 @@ describe("4 Get api", () => {
           expect(msg).toBe("Invalid input");
         });
     });
-  });
-  it("responds with 404 if passed an article_id which does not exist in our database currently", () => {
-    return request(app)
-      .get("/api/articles/55500046")
-      .expect(404)
-      .then(({ body: { msg } }) => {
-        expect(msg).toBe("article_id is not in database");
-      });
+    it("responds with 404 if passed an article_id which does not exist in our database currently", () => {
+      return request(app)
+        .get("/api/articles/55500046")
+        .expect(404)
+        .then(({ body: { msg } }) => {
+          expect(msg).toBe("article_id is not in database");
+        });
+    });
   });
 });
 
@@ -151,7 +151,7 @@ describe("5. PATCH /api/articles/:article_id", () => {
 });
 describe("6. GET /api/users", () => {
   describe("GET /api/users", () => {
-    it("should respon with an array of objects from users data ", () => {
+    it("should respond with an array of objects from users data ", () => {
       return request(app)
         .get("/api/users")
         .expect(200)
@@ -239,6 +239,55 @@ describe("8- GET/api/articles", () => {
     });
   });
 });
+
+
+describe("9- GET/api/articles/:article_id/comments", () => {
+  describe("get/api/articles/:article_id/comments", () => {
+    it("responds with an array of comments from the given article_id", () => {
+      return request(app)
+        .get("/api/articles/6/comments")
+        .expect(200)
+        .then(({ body: { articleComments } }) => {
+          expect(articleComments).toEqual([
+            {
+              body: "This is a bad article name",
+              votes: 1,
+              author: "butter_bridge",
+              comment_id: 16,
+              created_at: "2020-10-11T15:23:00.000Z",
+            },
+          ]);
+        });
+    });
+  });
+  describe("handles issues with request", () => {
+    it("responds with 400 if passed a non number variable as article_id", () => {
+      return request(app)
+        .get("/api/articles/four/comments")
+        .expect(400)
+        .then(({ body: { msg } }) => {
+          expect(msg).toBe("Invalid input");
+        });
+    });
+    it("responds with 404 if passed an article_id which does not exist in the database currently", () => {
+      return request(app)
+        .get("/api/articles/58643/comments")
+        .expect(404)
+        .then(({ body: { msg } }) => {
+          expect(msg).toBe("article_id is not in database");
+        });
+    });
+    it("responds with an empty array if passed an article_id which exists but no comments exist in the database with that article_id", () => {
+      return request(app)
+        .get("/api/articles/2/comments")
+        .expect(200)
+        .then(({ body: { articleComments } }) => {
+          expect(articleComments).toEqual([]);
+        });
+    });
+  });
+});
+
 
 describe.only("10- post/api/articles/:article_id/comments", () => {
   describe("api/articles/:article_id/comments", () => {

@@ -1,4 +1,5 @@
 const db = require("../db/connection");
+
 const articles = require("../db/data/test-data/articles");
 
 exports.fetchTopics = () => {
@@ -63,9 +64,6 @@ exports.fetchAllArticles = () => {
     )
     .then((allArticles) => {
       return allArticles.rows;
-    })
-    .catch((err) => {
-      console.log(err);
     });
 };
 
@@ -96,7 +94,24 @@ exports.createComment = (requestBody, article_id) => {
       [body, username, article_id]
     )
     .then((createdComment) => {
-      console.log(createdComment.rows[0]);
       return createdComment.rows[0];
+    });
+};
+
+
+exports.fetchArticleComments = (article_id) => {
+  if (article_id < -1 || article_id >= articles.length) {
+    return Promise.reject({
+      msg: "article_id is not in database",
+      status: 404,
+    });
+  }
+  return db
+    .query(
+      `SELECT comment_id, votes, created_at, author, body FROM comments WHERE article_id = $1`,
+      [article_id]
+    )
+    .then((articleComments) => {
+      return articleComments.rows;
     });
 };
