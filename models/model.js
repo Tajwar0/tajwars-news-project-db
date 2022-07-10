@@ -1,5 +1,4 @@
 const db = require("../db/connection");
-
 const articles = require("../db/data/test-data/articles");
 
 exports.fetchTopics = () => {
@@ -53,16 +52,65 @@ exports.updateArticle = (article_id, inc_votes) => {
     });
 };
 
-exports.fetchAllArticles = () => {
+exports.fetchAllArticles = (
+  sort_by = "created_at",
+  order = "DESC",
+  topic = undefined
+) => {
+  const validSortBy = [
+    "title",
+    "topic",
+    "author",
+    "body",
+    "created_at",
+    "votes",
+    "comment_count",
+    "article_id",
+  ];
+  const validOrder = ["ASC", "asc", "DESC", "desc"];
+  if (!validSortBy.includes(sort_by)) {
+    return Promise.reject({
+      status: 400,
+      msg: `Invalid user input: sort_by value`,
+    });
+  }
+
+  if (!validOrder.includes(order)) {
+    return Promise.reject({
+      status: 400,
+      msg: `Invalid user input: order value`,
+    });
+  }
+
+  if (topic === undefined) {
+    return db
+      .query(
+        `SELECT articles.*, CAST(COUNT(comments.article_id)AS int) AS comment_count FROM articles
+      LEFT JOIN comments
+      ON articles.article_id = comments.article_id
+        GROUP BY articles.article_id
+        ORDER BY articles.${sort_by} ${order};`
+      )
+      .then((allArticles) => {
+        return allArticles.rows;
+      });
+  }
   return db
     .query(
       `SELECT articles.*, CAST(COUNT(comments.article_id)AS int) AS comment_count FROM articles
       LEFT JOIN comments
       ON articles.article_id = comments.article_id
-      GROUP BY articles.article_id
-      ORDER BY created_at DESC;`
+      WHERE articles.topic = '${topic}'
+        GROUP BY articles.article_id
+        ORDER BY articles.${sort_by} ${order};`
     )
     .then((allArticles) => {
+      if (allArticles.rows.length === 0) {
+        return Promise.reject({
+          status: 400,
+          msg: `Invalid topic`,
+        });
+      }
       return allArticles.rows;
     });
 };
