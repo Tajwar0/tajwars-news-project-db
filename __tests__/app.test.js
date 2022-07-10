@@ -12,6 +12,11 @@ const expectedTopics = [
   { description: "what books are made of", slug: "paper" },
 ];
 
+const newComment = {
+  body: "5 hours of debugging can save you 7 minutes of reading documentation, debugging is cool",
+  username: "butter_bridge",
+};
+
 describe("3 topics api", () => {
   describe("handles bad paths", () => {
     it("responds with 404 and message if get request path does not exist", () => {
@@ -100,7 +105,7 @@ describe("5. PATCH /api/articles/:article_id", () => {
     });
 
     describe("Patch errors", () => {
-      it("responds with 400 if passed a non number variable as article_id", () => {
+      it("responds with 400 if article_id passed is not a number", () => {
         const updatedVote = { inc_votes: 75 };
         return request(app)
           .patch("/api/articles/four")
@@ -110,7 +115,7 @@ describe("5. PATCH /api/articles/:article_id", () => {
             expect(msg).toBe("Invalid input");
           });
       });
-      it("responds with 404 if passed an article_id which does not exist in our database currently", () => {
+      it("responds with 404 if passed an article_id which does not exist in our database", () => {
         const updatedVote = { inc_votes: 75 };
         return request(app)
           .patch("/api/articles/55500046")
@@ -282,4 +287,55 @@ describe("9- GET/api/articles/:article_id/comments", () => {
   });
 });
 
-//article exists no comments - 200 []
+describe.only("10- post/api/articles/:article_id/comments", () => {
+  describe("api/articles/:article_id/comments", () => {
+    it("request body accepts an object with username and body, responds with posted comment", () => {
+      return request(app)
+        .post("/api/articles/1/comments")
+        .send(newComment)
+        .expect(201)
+        .then(({ body: { createdComment } }) => {
+          expect(createdComment).toEqual({
+            body: "5 hours of debugging can save you 7 minutes of reading documentation, debugging is cool",
+            author: "butter_bridge",
+            votes: 0,
+            article_id: 1,
+            comment_id: expect.any(Number),
+            created_at: expect.any(String),
+          });
+        });
+    });
+  });
+  describe("error handling issues", () => {
+    it("responds with 400 if article_id passed is not a number", () => {
+      return request(app)
+        .post("/api/articles/four/comments")
+        .send(newComment)
+        .expect(400)
+        .then(({ body: { msg } }) => {
+          expect(msg).toBe("Invalid input");
+        });
+    });
+    it("responds with 404 if passed an article_id which does not exist in our database", () => {
+      return request(app)
+        .post("/api/articles/555/comments")
+        .send(newComment)
+        .expect(404)
+        .then(({ body: { msg } }) => {
+          expect(msg).toBe("article_id is not in database");
+        });
+    });
+    it("if username or body is not spelt correctly", () => {
+      return request(app)
+        .post("/api/articles/1/comments")
+        .send({
+          boy: "5 hours of debugging can save you 7 minutes of reading documentation, debugging is cool",
+          usernae: "butter_bridge",
+        })
+        .expect(400)
+        .then(({ body: { msg } }) => {
+          expect(msg).toBe("bad user post input");
+        });
+    });
+  });
+});
