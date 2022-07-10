@@ -235,7 +235,7 @@ describe("8- GET/api/articles", () => {
   });
 });
 
-describe.only("11. GET /api/articles (queries)", () => {
+describe("11. GET /api/articles (queries)", () => {
   describe("tests for 0 queries, sorted by date order descending", () => {
     it("should return all articles sorted by date in descending order ", () => {
       return request(app)
@@ -288,28 +288,55 @@ describe.only("11. GET /api/articles (queries)", () => {
           });
         });
     });
-  });
-  it("joint query of 3 parameters, should return a filtered articles list with mitch as the topic, sorted in descending order from column comment_count, a ", () => {
-    return request(app)
-      .get("/api/articles?sort_by=title&order=ASC&topic=comment_count")
-      .expect(200)
-      .then(({ body: { allArticles } }) => {
-        console.log(allArticles);
-        expect(allArticles).toBeSortedBy("comment_count", {
-          ascending: true,
-        });
-        allArticles.forEach((article) => {
-          expect(article).toMatchObject({
-            article_id: expect.any(Number),
-            title: expect.any(String),
-            topic: "mitch",
-            author: expect.any(String),
-            body: expect.any(String),
-            created_at: expect.any(String),
-            votes: expect.any(Number),
-            comment_count: expect.any(Number),
+
+    it("joint query of 3 parameters, should return a filtered articles list with mitch as the topic, sorted in descending order from column comment_count, a ", () => {
+      return request(app)
+        .get("/api/articles?sort_by=title&order=ASC&topic=comment_count")
+        .expect(200)
+        .then(({ body: { allArticles } }) => {
+          console.log(allArticles);
+          expect(allArticles).toBeSortedBy("comment_count", {
+            ascending: true,
+          });
+          allArticles.forEach((article) => {
+            expect(article).toMatchObject({
+              article_id: expect.any(Number),
+              title: expect.any(String),
+              topic: "mitch",
+              author: expect.any(String),
+              body: expect.any(String),
+              created_at: expect.any(String),
+              votes: expect.any(Number),
+              comment_count: expect.any(Number),
+            });
           });
         });
-      });
+    });
+  });
+  describe.only("Error handling for queries", () => {
+    it("400 response if value of query topic is spelt wrong", () => {
+      return request(app)
+        .get("/api/articles?topic=Joey")
+        .expect(400)
+        .then(({ body }) => {
+          expect(body.msg).toBe("Invalid topic");
+        });
+    });
+    it("400 response if value of sort_by query is spelt wrong", () => {
+      return request(app)
+        .get("/api/articles?sort_by=comment_cnt")
+        .expect(400)
+        .then(({ body }) => {
+          expect(body.msg).toBe("Invalid user input: sort_by value");
+        });
+    });
+    it("400 response if value of order query is spelt wrong", () => {
+      return request(app)
+        .get("/api/articles?order=Inf")
+        .expect(400)
+        .then(({ body }) => {
+          expect(body.msg).toBe("Invalid user input: order value");
+        });
+    });
   });
 });

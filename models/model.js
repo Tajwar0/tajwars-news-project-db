@@ -80,6 +80,7 @@ exports.fetchAllArticles = (
       msg: `Invalid user input: order value`,
     });
   }
+
   if (topic === undefined) {
     return db
       .query(
@@ -91,9 +92,6 @@ exports.fetchAllArticles = (
       )
       .then((allArticles) => {
         return allArticles.rows;
-      })
-      .catch((err) => {
-        console.log(err);
       });
   }
   return db
@@ -106,10 +104,13 @@ exports.fetchAllArticles = (
         ORDER BY articles.${sort_by} ${order};`
     )
     .then((allArticles) => {
+      if (allArticles.rows.length === 0) {
+        return Promise.reject({
+          status: 400,
+          msg: `Invalid topic`,
+        });
+      }
       return allArticles.rows;
-    })
-    .catch((err) => {
-      console.log(err);
     });
 };
 

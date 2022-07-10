@@ -6,9 +6,6 @@ const {
   getArticle,
   getAllArticles,
   getUsers,
-  getSortedArticles,
-  getOrderedArticles,
-  getFilteredArticles,
 } = require("./controllers/controller");
 const {
   handleInvalidPaths,
