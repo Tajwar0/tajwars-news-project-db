@@ -146,7 +146,6 @@ exports.createComment = (requestBody, article_id) => {
     });
 };
 
-
 exports.fetchArticleComments = (article_id) => {
   if (article_id < -1 || article_id >= articles.length) {
     return Promise.reject({
