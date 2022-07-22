@@ -2,7 +2,7 @@ const app = require("./app");
 
 const PORT = 8000;
 
-app.listen(PORT, (err) => {
+app.listen(PORT || process.env.PORT, (err) => {
   if (err) throw err;
   console.log(`Listening on ${PORT}...`);
 });
