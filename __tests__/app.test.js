@@ -277,12 +277,12 @@ describe("9- GET/api/articles/:article_id/comments", () => {
           expect(msg).toBe("article_id is not in database");
         });
     });
-    it("responds with 404 if passed an article_id which exists but no comments exist in the database with that article_id", () => {
+    it("responds with [] if passed an article_id which exists but no comments exist in the database with that article_id", () => {
       return request(app)
         .get("/api/articles/2/comments")
-        .expect(404)
-        .then(({ body: { msg } }) => {
-          expect(msg).toBe("article_id is not in database");
+        .expect(200)
+        .then(({ body }) => {
+          expect(body.articleComments).toEqual([]);
         });
     });
   });
