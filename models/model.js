@@ -147,18 +147,25 @@ exports.createComment = (requestBody, article_id) => {
 };
 
 exports.fetchArticleComments = (article_id) => {
-  if (article_id < -1 || article_id >= articles.length) {
-    return Promise.reject({
-      msg: "article_id is not in database",
-      status: 404,
-    });
-  }
+  // if (article_id < -1 || article_id >= articles.length) {
+  //   return Promise.reject({
+  //     msg: "article_id is not in database",
+  //     status: 404,
+  //   });
+  // }
   return db
     .query(
       `SELECT comment_id, votes, created_at, author, body FROM comments WHERE article_id = $1`,
       [article_id]
     )
-    .then((articleComments) => {
-      return articleComments.rows;
+    .then(({ rows }) => {
+      if (rows.length === 0) {
+        return Promise.reject({
+          status: 404,
+          msg: "article_id is not in database",
+        });
+      } else {
+        return rows;
+      }
     });
 };
