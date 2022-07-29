@@ -124,7 +124,7 @@ exports.fetchUsers = () => {
 
 exports.createComment = (requestBody, article_id) => {
   const { username, body } = requestBody;
-  if (article_id < 0 || article_id >= articles.length) {
+  if (article_id < 0 || article_id >= devArticles.length) {
     return Promise.reject({
       msg: "article_id is not in database",
       status: 404,
@@ -148,7 +148,7 @@ exports.createComment = (requestBody, article_id) => {
 };
 
 exports.fetchArticleComments = (article_id) => {
-  if (article_id < -1 || article_id >= devArticles.length) {
+  if (article_id < 0 || article_id >= devArticles.length) {
     return Promise.reject({
       msg: "article_id is not in database",
       status: 404,

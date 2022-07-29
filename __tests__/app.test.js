@@ -319,7 +319,7 @@ describe("10- post/api/articles/:article_id/comments", () => {
     });
     it("responds with 404 if passed an article_id which does not exist in our database", () => {
       return request(app)
-        .post("/api/articles/555/comments")
+        .post("/api/articles/500/comments")
         .send(newComment)
         .expect(404)
         .then(({ body: { msg } }) => {
@@ -331,7 +331,7 @@ describe("10- post/api/articles/:article_id/comments", () => {
         .post("/api/articles/1/comments")
         .send({
           boy: "5 hours of debugging can save you 7 minutes of reading documentation, debugging is cool",
-          usernae: "butter_bridge",
+          username: "butter_bridge",
         })
         .expect(400)
         .then(({ body: { msg } }) => {
