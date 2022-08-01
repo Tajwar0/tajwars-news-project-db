@@ -443,3 +443,30 @@ describe("11. GET /api/articles (queries)", () => {
     });
   });
 });
+
+describe("DELETE /api/comments/:comment_id", () => {
+  test("204 response if correct comment deleted, returns with comment id", () => {
+    return request(app)
+      .delete("/api/comments/7")
+      .expect(204)
+      .then(({ body }) => {
+        expect(body).toEqual({});
+      });
+  });
+  test("404 response if comment id does not exist", () => {
+    return request(app)
+      .delete("/api/comments/799")
+      .expect(404)
+      .then(({ body }) => {
+        expect(body.msg).toEqual("Comment does not exist in database");
+      });
+  });
+  test("400 response if comment id is not of the correct data type", () => {
+    return request(app)
+      .delete("/api/comments/string")
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toEqual("Invalid input");
+      });
+  });
+});
