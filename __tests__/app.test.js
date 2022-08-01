@@ -3,6 +3,8 @@ const connection = require(`../db/connection`);
 const app = require(`${__dirname}/../app`);
 const seed = require("../db/seeds/seed");
 const testData = require("../db/data/test-data/index");
+const json = require("../endpoints.json");
+
 beforeEach(() => seed(testData));
 afterAll(() => connection.end());
 
@@ -467,6 +469,18 @@ describe("DELETE /api/comments/:comment_id", () => {
       .expect(400)
       .then(({ body }) => {
         expect(body.msg).toEqual("Invalid input");
+      });
+  });
+});
+
+describe("GET /api", () => {
+  test("200 response, returns a json of all available endpoints and description of what they do", () => {
+    return request(app)
+      .get("/api")
+      .expect(200)
+      .then(({ body }) => {
+        expect(body).toBeInstanceOf(Object);
+        expect(body).toEqual(json);
       });
   });
 });
