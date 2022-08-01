@@ -10,6 +10,7 @@ const {
   getUsers,
   postComment,
   getArticleComments,
+  deleteComment,
 } = require("./controllers/controller");
 
 const {
@@ -36,6 +37,8 @@ app.get("/api/users", getUsers);
 app.post("/api/articles/:article_id/comments", postComment);
 
 app.get("/api/articles/:article_id/comments", getArticleComments);
+
+app.delete("/api/comments/:comment_id", deleteComment);
 
 app.use("*", handleInvalidPaths);
 
